@@ -4,6 +4,9 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.Collections;
 import java.util.Comparator;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Banker {
     private List<Customer> customers;
@@ -60,12 +63,28 @@ public class Banker {
         return Pattern.matches("[a-zA-Z]+", name);
     }
     private static boolean isValidDOB(String dob) {
-        return Pattern.matches("\\d{4}-\\d{2}-\\d{2}", dob);
+        try {
+            LocalDate.parse(dob, DateTimeFormatter.ISO_LOCAL_DATE);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
     private static boolean isValidSSN(String ssn) {
         return Pattern.matches("\\d{3}-\\d{2}-\\d{4}", ssn);
     }
 
+    // Method to update customers name
+    public void updateCustomerDetails(String accountNumber, String newLastName, String newFirstName){
+        Customer customer = searchByAccountNumber(accountNumber);
+        if(customer != null) {
+            customer.setLastName(newLastName);
+            customer.setFirstName(newFirstName);
+            System.out.println("Customer name update for account number: " + accountNumber);
+        } else {
+            System.out.println("Customer with account number: " + accountNumber + " was not found.");
+        }
+    }
 
 
 
@@ -76,7 +95,7 @@ public class Banker {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Do you want to (1) search for an existing customer, (2) add a new customer, or (3) display the list of customers? (Enter 1, 2, or 3, or any other key to exit): ");
+            System.out.println("Do you want to (1) search for an existing customer, (2) add a new customer, (3) display the list of customers, or (4) edit a customers name? (Enter 1, 2, 3, or 4, or any other key to exit): ");
             String choice = scanner.nextLine();
 
             if ("1".equals(choice)) {
@@ -87,7 +106,7 @@ public class Banker {
                         String lastName = scanner.nextLine();
                         Customer foundCustomer = banker.searchByLastName(lastName);
                         if (foundCustomer != null) {
-                            System.out.println("Customer found: " + foundCustomer.getFirstName() + " " + foundCustomer.getLastName());
+                            System.out.println("Customer found: " + foundCustomer.getFirstName() + " " + foundCustomer.getLastName() + ", Account Number: " + foundCustomer.getAccountNumber());
                         }
                         else {
                             System.out.println("No customer found with last name: " + lastName);
@@ -141,6 +160,20 @@ public class Banker {
             else if("3".equals(choice)){
                 banker.displayCustomers();
             } 
+
+            // Update a customers name
+            else if ("4".equals(choice)){
+                System.out.println("Enter a customer's account number: ");
+                String accountNumber =  scanner.nextLine();
+
+                System.out.println("Enter new last name: ");
+                String newLastName = scanner.nextLine();
+
+                System.out.println("Enter new first name: ");
+                String newFirstName = scanner.nextLine();
+
+                banker.updateCustomerDetails(accountNumber, newLastName, newFirstName);
+            }
             
             // Exiting The program
             else {

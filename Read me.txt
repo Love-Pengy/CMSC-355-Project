@@ -1,0 +1,23 @@
+# CMSC-355-Project
+
+
++ To clean working directory: 
+    run ```rm $(find . -name "*.class")```
+
++ To compile Project: 
+    run ```javac Customer.java Banker.java``` 
+
++ To run project: 
+    run ```java Banker```
+
+--------------------------------------------------
+Updates for sprint 2:
+
+1) Added functionality to edit a customers name after they've been 
+   entered
+
+2) Updated DOB validation- program now rejects DOB entries that are 
+   logically invalid (ex- 1993-13-32 would be invalid)
+
+3) Searching for customer now returns both name and account number 
+   when the customer is found, rather than just customer name

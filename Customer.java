@@ -1,4 +1,3 @@
-
 import java.util.Random;
 
 public class Customer {
@@ -6,7 +5,7 @@ public class Customer {
     private String firstName; //Format: A-Z or a-z
     private String dateOfBirth; // Format: YYYY-MM-DD
     private String socialSecurityNumber; // Format: NNN-NN-NNNN
-    private String accountNumber; //Format: NNNNNNNNNNNNNNNN (16 digits)
+    private String accountNumber; //Format: NNNNNNNN (8 digits)
 
     //Constructors
     public Customer(String lastName, String firstName, String dateOfBirth, String socialSecurityNumber) {
@@ -59,7 +58,7 @@ public class Customer {
         StringBuilder sb = new StringBuilder();
         //Ensure the first digit is not zero
         sb.append(random.nextInt(9) + 1);
-        for (int i = 1; i < 16; i++) {
+        for (int i = 1; i < 6; i++) {
             sb.append(random.nextInt(10));
         }
         return sb.toString();
