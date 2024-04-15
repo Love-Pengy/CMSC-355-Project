@@ -166,13 +166,18 @@ public class Banker {
                 System.out.println("Enter a customer's account number: ");
                 String accountNumber =  scanner.nextLine();
 
-                System.out.println("Enter new last name: ");
-                String newLastName = scanner.nextLine();
+                if(banker.searchByAccountNumber(accountNumber) == null){
+                    System.out.println("Customer with account number: " + accountNumber + " could not be found");
+                }
+                else{
+                    System.out.println("Enter new last name: ");
+                    String newLastName = scanner.nextLine();
 
-                System.out.println("Enter new first name: ");
-                String newFirstName = scanner.nextLine();
+                    System.out.println("Enter new first name: ");
+                    String newFirstName = scanner.nextLine();
 
-                banker.updateCustomerDetails(accountNumber, newLastName, newFirstName);
+                    banker.updateCustomerDetails(accountNumber, newLastName, newFirstName);
+                }
             }
             
             // Exiting The program
