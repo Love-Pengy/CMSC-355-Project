@@ -86,8 +86,30 @@ public class Banker {
         }
     }
 
+    public boolean depositToAccount(String accountNumber, double amount) {
+        Customer customer = searchByAccountNumber(accountNumber);
+        if (customer != null) {
+            customer.deposit(amount);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean withdrawFromAccount(String accountNumber, double amount) {
+        Customer customer = searchByAccountNumber(accountNumber);
+        if (customer != null) {
+            return customer.withdraw(amount);
+        }
+        return false;
+    }
 
+    public double checkBalance(String accountNumber) {
+        Customer customer = searchByAccountNumber(accountNumber);
+        if (customer != null) {
+            return customer.getBalance();
+        }
+        return 0.0; // or handle differently if the customer is not found
+    }
 
     // Main method to run the program
     public static void main(String[] args) {
@@ -95,33 +117,75 @@ public class Banker {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Do you want to (1) search for an existing customer, (2) add a new customer, (3) display the list of customers, or (4) edit a customers name? (Enter 1, 2, 3, or 4, or any other key to exit): ");
+            System.out.println("Do you want to (1) search for an existing customer, (2) add a new customer, (3) display the list of customers, or (4) edit a customer's name? (Enter 1, 2, 3, or 4, or any other key to exit): ");
             String choice = scanner.nextLine();
-
+    
             if ("1".equals(choice)) {
                 System.out.println("Search by (1) Last Name or (2) Account Number? (Enter 1 or 2): ");
                 String searchChoice = scanner.nextLine();
+                Customer foundCustomer = null;
+    
                 if ("1".equals(searchChoice)) {
-                        System.out.println("Enter the last name: ");
-                        String lastName = scanner.nextLine();
-                        Customer foundCustomer = banker.searchByLastName(lastName);
-                        if (foundCustomer != null) {
-                            System.out.println("Customer found: " + foundCustomer.getFirstName() + " " + foundCustomer.getLastName() + ", Account Number: " + foundCustomer.getAccountNumber());
-                        }
-                        else {
-                            System.out.println("No customer found with last name: " + lastName);
-                        }
-            } else if ("2".equals(searchChoice)) {
+                    System.out.println("Enter the last name: ");
+                    String lastName = scanner.nextLine();
+                    foundCustomer = banker.searchByLastName(lastName);
+                    if (foundCustomer == null) {
+                        System.out.println("No customer found with last name: " + lastName);
+                    }
+                } else if ("2".equals(searchChoice)) {
                     System.out.println("Enter the account number: ");
                     String accountNumber = scanner.nextLine();
-                    Customer foundCustomer = banker.searchByAccountNumber(accountNumber);
-                    if (foundCustomer != null) {
-                        System.out.println("Customer found: " + foundCustomer.getFirstName() + " " + foundCustomer.getLastName());
-                    } else {
+                    foundCustomer = banker.searchByAccountNumber(accountNumber);
+                    if (foundCustomer == null) {
                         System.out.println("No customer found with account number: " + accountNumber);
                     }
+                }
+    
+                if (foundCustomer != null) {
+                    System.out.println("Customer found: " + foundCustomer.getFirstName() + " " + foundCustomer.getLastName() + ", Account Number: " + foundCustomer.getAccountNumber());
+                    while (true) {
+                        System.out.println("Select operation: (1) Check Balance, (2) Deposit Money, (3) Withdraw Money, (4) Return");
+                        String operation = scanner.nextLine();
+    
+                        try {
+                            switch (operation) {
+                                case "1":
+                                    System.out.println("Current Balance: $" + String.format("%.2f", foundCustomer.getBalance()));
+                                    break;
+                                case "2":
+                                    System.out.print("Enter amount to deposit: $");
+                                    double depositAmount = Double.parseDouble(scanner.nextLine());
+                                    if (depositAmount > 0) {
+                                        foundCustomer.deposit(depositAmount);
+                                        System.out.println("Deposited successfully. New Balance: $" + String.format("%.2f", foundCustomer.getBalance()));
+                                    } else {
+                                        System.out.println("Invalid deposit amount.");
+                                    }
+                                    break;
+                                case "3":
+                                    System.out.print("Enter amount to withdraw: $");
+                                    double withdrawAmount = Double.parseDouble(scanner.nextLine());
+                                    if (withdrawAmount > 0 && foundCustomer.withdraw(withdrawAmount)) {
+                                        System.out.println("Withdrawn successfully. New Balance: $" + String.format("%.2f", foundCustomer.getBalance()));
+                                    } else {
+                                        System.out.println("Invalid amount or insufficient funds.");
+                                    }
+                                    break;
+                                case "4":
+                                    System.out.println("Returning to main menu...");
+                                    break;
+                                default:
+                                    System.out.println("Invalid option. Please enter 1, 2, 3, or 4.");
+                                    continue;
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid number format. Please enter a valid number.");
+                        }
+    
+                        if ("4".equals(operation)) break;
+                    }
+                }
             }
-            } 
             // Adding a new customer
             else if ("2".equals(choice)) { 
                 String lastName, firstName, dob, ssn;
