@@ -21,3 +21,10 @@ Updates for sprint 2:
 
 3) Searching for customer now returns both name and account number 
    when the customer is found, rather than just customer name
+
+---------------------------------------------------
+Updates for sprint 3:
+
+1) Updated the customer class to include a field for account balance
+
+2) Updated the banker class to allow the user to check a customers balance, withdraw money, or deposit money.  
