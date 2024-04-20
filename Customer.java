@@ -6,6 +6,7 @@ public class Customer {
     private String dateOfBirth; // Format: YYYY-MM-DD
     private String socialSecurityNumber; // Format: NNN-NN-NNNN
     private String accountNumber; //Format: NNNNNNNN (8 digits)
+    private double accountBalance;
 
     //Constructors
     public Customer(String lastName, String firstName, String dateOfBirth, String socialSecurityNumber) {
@@ -62,6 +63,24 @@ public class Customer {
             sb.append(random.nextInt(10));
         }
         return sb.toString();
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            this.accountBalance += amount;
+        }
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && this.accountBalance >= amount) {
+            this.accountBalance -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public double getBalance() {
+        return this.accountBalance;
     }
 
 }
