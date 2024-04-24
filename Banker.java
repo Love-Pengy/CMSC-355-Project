@@ -187,7 +187,7 @@ public class Banker {
                 }
             }
             // Adding a new customer
-            else if ("2".equals(choice)) { 
+            else if ("2".equals(choice)) {
                 String lastName, firstName, dob, ssn;
                 do {
                     System.out.println("Enter last name: ");
@@ -196,7 +196,7 @@ public class Banker {
                         System.out.println("Invalid input. Last name should only contain letters A-Z or a-z. Please try again.");
                     }
                 } while (!isValidName(lastName));
-    
+
                 do {
                     System.out.println("Enter first name: ");
                     firstName = scanner.nextLine();
@@ -204,6 +204,7 @@ public class Banker {
                         System.out.println("Invalid input. First name should only contain letters A-Z or a-z. Please try again.");
                     }
                 } while (!isValidName(firstName));
+                
                 do {
                     System.out.println("Enter date of birth (YYYY-MM-DD): ");
                     dob = scanner.nextLine();
@@ -211,6 +212,7 @@ public class Banker {
                         System.out.println("Invalid input. Date of birth must be in the format YYYY-MM-DD and contain only numbers. Please try again.");
                     }
                 } while (!isValidDOB(dob));
+
                 do {
                     System.out.println("Enter Social Security Number (NNN-NN-NNNN): ");
                     ssn = scanner.nextLine();
@@ -218,8 +220,26 @@ public class Banker {
                         System.out.println("Invalid input. Social Security Number must be in the format NNN-NN-NNNN and contain only numbers. Please try again.");
                     }
                 } while (!isValidSSN(ssn));
+
                 banker.addCustomer(lastName, firstName, dob, ssn);
-            } 
+
+                System.out.println("Would you like to make a deposit?  1 for yes, 2 for no.");
+                int depositChoice = scanner.nextInt();
+                scanner.nextLine(); // Consume the newline left by nextInt()
+
+                if (depositChoice == 1) {
+                    System.out.println("How much would you like to deposit?");
+                    double amount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume the newline left by nextDouble()
+                    Customer newCustomer = banker.searchByLastName(lastName);
+                    if (newCustomer != null) {
+                        newCustomer.deposit(amount);
+                    } else {
+                        System.out.println("Error: Customer not found.");
+                    }
+                }
+                System.out.println("Thank you! " + firstName + " is now registered with Account number " + banker.searchByLastName(lastName).getAccountNumber());
+            }
             // Display the list of customers
             else if("3".equals(choice)){
                 banker.displayCustomers();
