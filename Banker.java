@@ -33,7 +33,7 @@ public class Banker {
         });
         System.out.println("List of Customers:");
         for (Customer customer : customers) {
-            System.out.println(customer.getLastName() + ", " + customer.getFirstName() + ", Account Number: " + customer.getAccountNumber());
+            System.out.println(customer.getLastName() + ", " + customer.getFirstName() + ", Account Number: " + customer.getAccountNumber() + ", Current Balance: " + customer.getBalance());
         }
     }
 
